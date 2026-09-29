@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch — Movie Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CineMatch</h1>
+            <p class="subtitle">Discover movies similar to your favorites</p>
+        </header>
+
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search for a movie..." autocomplete="off">
+                <div id="searchResults" class="search-results hidden"></div>
+            </div>
+        </div>
+
+        <div id="selectedMovie" class="selected-movie hidden">
+            <span class="label">Selected:</span>
+            <span id="selectedTitle"></span>
+        </div>
+
+        <section class="content-section">
+            <h2 class="section-title">Top Rated Movies</h2>
+            <div class="movies-grid" id="moviesGrid">
+                {% for movie in movies[:30] %}
+                <div class="movie-card" data-title="{{ movie.title }}">
+                    <div class="poster-wrapper">
+                        {% if movie.poster %}
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}" loading="lazy">
+                        {% else %}
+                        <div class="poster-placeholder">{{ movie.title[0] }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="card-info">
+                        <h3>{{ movie.title }}</h3>
+                        <div class="meta">
+                            <span>{{ movie.year if movie.year > 0 else 'N/A' }}</span>
+                            <span class="rating">{{ "%.1f"|format(movie.rating) }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section id="results" class="content-section hidden">
+            <h2 class="section-title">Recommended for You</h2>
+            <div class="results-grid" id="resultsGrid"></div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
